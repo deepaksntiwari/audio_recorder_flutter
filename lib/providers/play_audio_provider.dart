@@ -67,6 +67,11 @@ class PlayAudioProvider extends ChangeNotifier {
     }
   }
 
+  stopAudioPlayer() async {
+    await _justAudioPlayer.stop();
+    _reset();
+  }
+
   void _reset() {
     _currAudioPlaying = 0.0;
     notifyListeners();

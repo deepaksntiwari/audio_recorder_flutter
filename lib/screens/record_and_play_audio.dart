@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:audio_recorder/dimensions.dart';
 import 'package:audio_recorder/providers/play_audio_provider.dart';
 import 'package:audio_recorder/providers/record_audio_provider.dart';
+import 'package:audio_recorder/screens/audio_recordings.dart';
 import 'package:audio_recorder/services/toast_service.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
@@ -17,6 +19,14 @@ class RecordAndPlayScreen extends StatefulWidget {
 }
 
 class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
+  List<FileSystemEntity> _folders = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getDir();
+  }
+
   @override
   Widget build(BuildContext context) {
     final recordProvider = Provider.of<RecordAudioProvider>(context);
@@ -50,7 +60,8 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
               ),
             if (recordProvider.recordedFilePath.isNotEmpty &&
                 !playProvider.isSongPlaying)
-              _resetButton()
+              _resetButton(),
+            _showAllRecordings(),
           ],
         ),
       ),
@@ -101,7 +112,6 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
 
   _audioPlayingSection() {
     final recordProvider = Provider.of<RecordAudioProvider>(context);
-    showToast(recordProvider.recordedFilePath);
     return Container(
       width: Dimensions.width100,
       height: Dimensions.height15,
@@ -176,5 +186,27 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
         size: Dimensions.height10,
       ),
     );
+  }
+
+  _showAllRecordings() {
+    return TextButton(
+        onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => AudioRecordings(
+                        folders: _folders,
+                      )),
+            ),
+        child: Text("Show Recodings"));
+  }
+
+  Future<void> getDir() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final dir = directory.path;
+    String pdfDirectory = '$dir/';
+    final myDir = new Directory(
+        '/storage/emulated/0/Android/data/com.deepak.audio_recorder.audio_recorder/files/recordings/');
+    setState(() {
+      _folders = myDir.listSync(recursive: true, followLinks: false);
+    });
   }
 }
