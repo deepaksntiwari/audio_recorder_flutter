@@ -17,7 +17,7 @@ class EncryptAndDecryptProvider extends ChangeNotifier {
     Uint8List fileBytes = await incomingAudioFile.readAsBytes();
     // String base64String = base64Encode(fileBytes);
 
-    var enc = _encryptData(fileBytes);
+    var enc = await _encryptData(fileBytes);
     String path = await _writeData(enc, _encryptDirPath + '$fileName.aes');
     incomingAudioFile.delete();
     print("file encrypted and saved successfully...$path");
@@ -32,42 +32,14 @@ class EncryptAndDecryptProvider extends ChangeNotifier {
 
     // String base64String = base64Encode(fileBytes);
 
-    var enc = _decryptData(fileBytes);
+    var enc = await _decryptData(fileBytes);
     String path = await _writeData(enc, decryptDirPath + '$fileName.acc');
     // print("file decrypted and saved successfully...$path");
     showToast("file decrypted and saved successfully...$path");
     return path;
   }
 
-  // _encryptData(plainString) {
-  //   print("encrypting data...");
-
-  //   final encryptedData = EncryptData.encryptAES(plainString);
-  //   return encryptedData;
-  // }
-
-  // _decryptData(encData) {
-  //   print("decrypting data...");
-
-  //   encrypt.Encrypted en = encrypt.Encrypted(encData);
-  //   return EncryptData.decryptAES(en);
-  // }
-
-  // Future<String> _writeFile(dataToWrite, fileNameWithPath) async {
-  //   print("writting data");
-  //   File f = File(fileNameWithPath);
-  //   await f.writeAsBytes(dataToWrite);
-
-  //   return f.path.toString();
-  // }
-
-  // Future<Uint8List> _readFile(filnameWithPath) async {
-  //   print("reading data...");
-  //   File f = File(filnameWithPath);
-  //   return await f.readAsBytes();
-  // }
-
-  _encryptData(plainString) async {
+  Future<List<int>> _encryptData(plainString) async {
     final myEncrypt = MyEncrypt();
     final myEncrypter = await myEncrypt.getEncrypter();
 
@@ -76,7 +48,7 @@ class EncryptAndDecryptProvider extends ChangeNotifier {
     return encrypted.bytes;
   }
 
-  _decryptData(encData) async {
+  Future<List<int>> _decryptData(encData) async {
     final myEncrypt = MyEncrypt();
     final myEncrypter = await myEncrypt.getEncrypter();
     print("File decryption in progress...");
@@ -98,33 +70,10 @@ class EncryptAndDecryptProvider extends ChangeNotifier {
   }
 }
 
-class EncryptData {
-//for AES Algorithms
-
-  static var decrypted;
-  // static encrypt.Encrypted? encrypted;
-  static final key = encrypt.Key.fromUtf8('my 32 length key................');
-  static final iv = encrypt.IV.fromLength(16);
-  static final encrypter = encrypt.Encrypter(encrypt.AES(key));
-
-  static encryptAES(plainText) {
-    encrypt.Encrypted encrypted = encrypter.encrypt(plainText, iv: iv);
-    print(encrypted.base64);
-    return encrypted.bytes;
-  }
-
-  static decryptAES(plainText) {
-    //encrypt.Encrypted en = encrypt.Encrypted(plainText);
-    decrypted = encrypter.decryptBytes(plainText, iv: iv);
-    print(decrypted);
-    return decrypted;
-  }
-}
-
 class MyEncrypt {
   late encrypt.Key key;
   late encrypt.IV iv;
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Future<Uint8List> _getKeyFromStorage() async {
     final keyBase64 = await storage.read(key: 'aes_key');

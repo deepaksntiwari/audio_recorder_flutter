@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../dimensions.dart';
 import '../providers/play_audio_provider.dart';
+import '../services/storage_management.dart';
 
 class AudioRecordings extends StatefulWidget {
   final List<FileSystemEntity> folders;
@@ -27,8 +28,19 @@ class _AudioRecordingsState extends State<AudioRecordings> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    _folders = widget.folders;
+    //_folders = widget.folders;
     getDir();
+  }
+
+  _deleteFile() async {
+    await StorageManagement()
+        .deleteAllFilesInFolder(await StorageManagement.getDecryptedDir);
+  }
+
+  @override
+  dispose() {
+    _deleteFile();
+    super.dispose();
   }
 
   Future<void> getDir() async {
@@ -51,8 +63,7 @@ class _AudioRecordingsState extends State<AudioRecordings> {
         decoration: const BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(
-                    "https://e0.pxfuel.com/wallpapers/502/577/desktop-wallpaper-alone-listening-music-iphone-anime-girl-listening-to-music-thumbnail.jpg"))),
+                image: AssetImage("assets/imgs/bg_for_audio_app.jpg"))),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(

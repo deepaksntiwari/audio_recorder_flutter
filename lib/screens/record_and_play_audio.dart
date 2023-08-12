@@ -23,7 +23,7 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
   @override
   void initState() {
     super.initState();
-    getDir();
+    // getDir();
   }
 
   @override
@@ -38,8 +38,7 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
         decoration: const BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(
-                    "https://e0.pxfuel.com/wallpapers/502/577/desktop-wallpaper-alone-listening-music-iphone-anime-girl-listening-to-music-thumbnail.jpg"))),
+                image: AssetImage("assets/imgs/bg_for_audio_app.jpg"))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -196,16 +195,5 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
                       )),
             ),
         child: Text("Show Recodings"));
-  }
-
-  Future<void> getDir() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final dir = directory.path;
-    String pdfDirectory = '$dir/';
-    final myDir = new Directory(
-        '/storage/emulated/0/Android/data/com.deepak.audio_recorder.audio_recorder/files/recordings/encrypted_files');
-    setState(() {
-      _folders = myDir.listSync(recursive: true, followLinks: false);
-    });
   }
 }

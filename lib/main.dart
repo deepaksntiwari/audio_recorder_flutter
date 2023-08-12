@@ -4,6 +4,7 @@ import 'package:audio_recorder/providers/play_audio_provider.dart';
 import 'package:audio_recorder/providers/record_audio_provider.dart';
 import 'package:audio_recorder/screens/record_and_play_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,9 @@ import 'providers/passcode_provider.dart';
 import 'screens/passcode_screens.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   runApp(const EntryRoot());
 }
 

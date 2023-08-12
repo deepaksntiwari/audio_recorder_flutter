@@ -34,7 +34,7 @@ class StorageManagement {
   static get getEncryptedDir async =>
       await makeEncryptedDirectory(dirName: "encrypted_files");
 
-    static makeDecryptedDirectory({required String dirName}) async {
+  static makeDecryptedDirectory({required String dirName}) async {
     final Directory? directory = await getExternalStorageDirectory();
 
     final _formattedDirName = '/recordings/$dirName/';
@@ -46,4 +46,24 @@ class StorageManagement {
 
   static get getDecryptedDir async =>
       await makeDecryptedDirectory(dirName: "decrypted_files");
+
+  Future<void> deleteAllFilesInFolder(String folderPath) async {
+    // Get a reference to the folder
+    final folder = Directory(folderPath);
+
+    if (await folder.exists()) {
+      // List all files in the folder
+      final files = folder.listSync();
+
+      for (var file in files) {
+        if (file is File) {
+          // Delete the file
+          await file.delete();
+        }
+      }
+      print("${files.length} files deleted");
+    } else {
+      print("Folder does not exist.");
+    }
+  }
 }
