@@ -4,7 +4,6 @@ import 'package:audio_recorder/dimensions.dart';
 import 'package:audio_recorder/providers/play_audio_provider.dart';
 import 'package:audio_recorder/providers/record_audio_provider.dart';
 import 'package:audio_recorder/screens/audio_recordings.dart';
-import 'package:audio_recorder/services/toast_service.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -204,7 +203,7 @@ class _RecordAndPlayScreenState extends State<RecordAndPlayScreen> {
     final dir = directory.path;
     String pdfDirectory = '$dir/';
     final myDir = new Directory(
-        '/storage/emulated/0/Android/data/com.deepak.audio_recorder.audio_recorder/files/recordings/');
+        '/storage/emulated/0/Android/data/com.deepak.audio_recorder.audio_recorder/files/recordings/encrypted_files');
     setState(() {
       _folders = myDir.listSync(recursive: true, followLinks: false);
     });

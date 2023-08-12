@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:audio_recorder/providers/encrypt_and_decrypt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:record/record.dart';
 
@@ -12,7 +15,7 @@ class RecordAudioProvider extends ChangeNotifier {
 
   bool get isRecording => _isRecording;
   String get recordedFilePath => _afterRecordingFilePath;
-
+  EncryptAndDecryptProvider ec = EncryptAndDecryptProvider();
   clearOldData() {
     _afterRecordingFilePath = '';
     notifyListeners();
@@ -42,10 +45,11 @@ class RecordAudioProvider extends ChangeNotifier {
 
     if (await _record.isRecording()) {
       _audioFilePath = await _record.stop();
+      print('Audio file path: $_audioFilePath');
+
+      ec.encryptAndSaveFile(File(_audioFilePath!));
       showToast('Recording Stopped');
     }
-
-    print('Audio file path: $_audioFilePath');
 
     _isRecording = false;
     _afterRecordingFilePath = _audioFilePath ?? '';

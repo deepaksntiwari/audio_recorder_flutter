@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:audio_recorder/providers/encrypt_and_decrypt_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../dimensions.dart';
 import '../providers/play_audio_provider.dart';
-import '../providers/record_audio_provider.dart';
 
 class AudioRecordings extends StatefulWidget {
   final List<FileSystemEntity> folders;
@@ -26,6 +28,18 @@ class _AudioRecordingsState extends State<AudioRecordings> {
     super.initState();
     scrollController = ScrollController();
     _folders = widget.folders;
+    getDir();
+  }
+
+  Future<void> getDir() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final dir = directory.path;
+    String pdfDirectory = '$dir/';
+    final myDir = new Directory(
+        '/storage/emulated/0/Android/data/com.deepak.audio_recorder.audio_recorder/files/recordings/encrypted_files');
+    setState(() {
+      _folders = myDir.listSync(recursive: true, followLinks: false);
+    });
   }
 
   @override
@@ -45,12 +59,46 @@ class _AudioRecordingsState extends State<AudioRecordings> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Recordings",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Recordings",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      PopupMenuButton(
+                          offset: Offset(50, 10),
+                          icon: Icon(Icons.menu_rounded, color: Colors.white),
+                          color: Colors.amber,
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem<int>(
+                                value: 0,
+                                child: Text("My Account"),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Text("Settings"),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: Text("Logout"),
+                              ),
+                            ];
+                          },
+                          onSelected: (value) {
+                            if (value == 0) {
+                              print("My account menu is selected.");
+                            } else if (value == 1) {
+                              print("Settings menu is selected.");
+                            } else if (value == 2) {
+                              print("Logout menu is selected.");
+                            }
+                          }),
+                    ],
                   ),
                 ),
                 Padding(
@@ -101,6 +149,8 @@ class _AudioRecordingsState extends State<AudioRecordings> {
 
   _audioControllingSection(String audioPath) {
     final playProvider = Provider.of<PlayAudioProvider>(context);
+    final encryptAndDecryptProvider =
+        Provider.of<EncryptAndDecryptProvider>(context);
 
     final playProviderWithoutListeners =
         Provider.of<PlayAudioProvider>(context, listen: false);
@@ -110,7 +160,9 @@ class _AudioRecordingsState extends State<AudioRecordings> {
         return IconButton(
           onPressed: () async {
             if (audioPath.isEmpty) return;
-            await playProviderWithoutListeners.playAudio(File(audioPath));
+
+            playProvider.playAudio(File(await encryptAndDecryptProvider
+                .decryptAndSaveFile(File(audioPath))));
           },
           icon: Icon(
             playProvider.isSongPlaying ? Icons.pause : Icons.play_arrow_rounded,
