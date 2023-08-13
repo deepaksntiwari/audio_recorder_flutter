@@ -32,5 +32,5 @@ You do not have to enter the encryption keys by yourself. You just need to store
 > [!IMPORTANT]  
 > I have made this project as a hobby project and will be making a separate app with better UI/UX.
 
-> [!WARNING/Disclaimer]  
+> [!WARNING]  
 > The developer does not take ownership and responsibility of your data, we do not back up or collect any data whatsoever, You have to manage your keys well. In case you lose your data developer will not be responsible for it 
