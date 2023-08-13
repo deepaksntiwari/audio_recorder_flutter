@@ -4,7 +4,7 @@ This audio recorder is a privacy-focused audio recorder that encrypts the data a
 
 When you first open the app, you have to set a passcode. 
 After setting up the passcode, you have to enter the passcode to enter the application. 
-When you enter the right passcode, you will be greeted with a pop-up that will have the encryption keys, which will be used to encrypt the audio which you are going to record in  application.
+When you enter the right passcode, you will be greeted with a pop-up that will have the encryption keys, which will be used to encrypt the audio which you are going to record in  the application.
 
 You do not have to enter the encryption keys by yourself. You just need to store the encryption keys in a secure place for future use. Our application by default saves those keys in secure storage for its usage. But when you reinstall our application, that keys will be gone. Then you need to enter the encryption keys so that you can encrypt or decrypt the existing audio files.
 
@@ -21,3 +21,16 @@ You do not have to enter the encryption keys by yourself. You just need to store
 
    <img src="https://github.com/deepaksntiwari/audio_recorder_flutter/assets/46328711/722dce17-8dc1-49ab-972c-bea6eecac3e2" data-canonical-src="https://github.com/deepaksntiwari/audio_recorder_flutter/assets/46328711/722dce17-8dc1-49ab-972c-bea6eecac3e2" width="200" height="450" />
       <img src="https://github.com/deepaksntiwari/audio_recorder_flutter/assets/46328711/0972e564-3320-46c9-8570-5418198b9b5f" data-canonical-src="https://github.com/deepaksntiwari/audio_recorder_flutter/assets/46328711/0972e564-3320-46c9-8570-5418198b9b5f" width="200" height="450" />
+
+
+
+
+
+> [!NOTE]  
+> Few features are still pending like the option to add the previous key in the wake of recovering old data and a few other optimizations
+
+> [!IMPORTANT]  
+> I have made this project as a hobby project and will be making a separate app with better UI/UX.
+
+> [!WARNING/Disclaimer]  
+> The developer does not take ownership and responsibility of your data, we do not back up or collect any data whatsoever, You have to manage your keys well. In case you lose your data developer will not be responsible for it 
